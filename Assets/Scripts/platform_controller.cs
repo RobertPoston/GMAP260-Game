@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class platform_controller : MonoBehaviour {
 
-    public enum platformType { None, Zdir, Xdir, Glue, Omni };
+    public enum platformType { None, Zdir, Xdir, Glue, Omni, SwitchLeft, SwitchRight };
     public platformType type = platformType.Zdir;
     public platformType subType = platformType.None;
     public float force = 15000.0f;
@@ -15,8 +15,8 @@ public class platform_controller : MonoBehaviour {
 
     private bool enableZcontrol = false;
     private bool enableXcontrol = false;
-    public bool isMoving = false;
-    private bool isSticky = false;
+    private bool isMoving = false;
+    private bool rotate = true;
 
     private Vector3 oldPosition;
 
@@ -40,7 +40,6 @@ public class platform_controller : MonoBehaviour {
                 enableXcontrol = true;
                 break;
             case platformType.Glue:
-                isSticky = true;
                 if (subType == platformType.Omni)
                 {
                     enableXcontrol = true;
@@ -81,6 +80,7 @@ public class platform_controller : MonoBehaviour {
         {
             character_rb.AddForce(0.0f, 0.0001f, 0.0f);
             character_rb.AddForce(0.0f, -0.0001f, 0.0f);
+            rotate = true;
         }
     }
 
@@ -105,17 +105,75 @@ public class platform_controller : MonoBehaviour {
         }
         if (collision.gameObject.name == "Character")
         {
-            if (!isSticky)
+            if (type != platformType.Glue)
             {
                 character_rb.constraints = RigidbodyConstraints.FreezeAll;
                 character_rb.constraints = RigidbodyConstraints.FreezeRotation;
+                if (type == platformType.SwitchLeft && rotate)
+                {
+                    character_rb.constraints = RigidbodyConstraints.None;
+                    rotate = false;
+                    if (characterPlayer.current_direction == 3)
+                    {
+                        character_rb.transform.Rotate(0.0f, -90.0f, 0.0f);
+                        characterPlayer.current_direction = 1;
+                    }
+                    else if (characterPlayer.current_direction == 2)
+                    {
+                        character_rb.transform.Rotate(0.0f, -90.0f, 0.0f);
+                        characterPlayer.current_direction = 0;
+                    }
+                    else if (characterPlayer.current_direction == 1)
+                    {
+                        character_rb.transform.Rotate(0.0f, -90.0f, 0.0f);
+                        characterPlayer.current_direction = 2;
+                    }
+                    else
+                    {
+                        character_rb.transform.Rotate(0.0f, -90.0f, 0.0f);
+                        characterPlayer.current_direction = 3;
+                    }
+                }
+                else if (type == platformType.SwitchRight && rotate)
+                {
+                    character_rb.constraints = RigidbodyConstraints.None;
+                    rotate = false;
+                    if (characterPlayer.current_direction == 3)
+                    {
+                        character_rb.transform.Rotate(0.0f, 90.0f, 0.0f);
+                        characterPlayer.current_direction = 0;
+                    }
+                    else if (characterPlayer.current_direction == 2)
+                    {
+                        character_rb.transform.Rotate(0.0f, 90.0f, 0.0f);
+                        characterPlayer.current_direction = 1;
+                    }
+                    else if (characterPlayer.current_direction == 1)
+                    {
+                        character_rb.transform.Rotate(0.0f, 90.0f, 0.0f);
+                        characterPlayer.current_direction = 3;
+                    }
+                    else
+                    {
+                        character_rb.transform.Rotate(0.0f, 90.0f, 0.0f);
+                        characterPlayer.current_direction = 2;
+                    }
+                }
             }
-            if (type == platformType.Glue)
+            else if (type == platformType.Glue)
             {
                 characterPlayer.platformAllowJump = false;
                 character_rb.constraints = RigidbodyConstraints.FreezeAll;
             }
         }
+        float xpos, zpos;
+        for (xpos = 0.0f; !Mathf.Approximately(xpos, Mathf.Abs(transform.position.x)); xpos += 10.0f)
+        { }
+        xpos = (transform.position.x / Mathf.Abs(transform.position.x)) * xpos;
+        for (zpos = 0.0f; !Mathf.Approximately(zpos, Mathf.Abs(transform.position.z)); zpos += 10.0f)
+        { }
+        zpos = (transform.position.z / Mathf.Abs(transform.position.z)) * zpos;
+        rb.position = new Vector3(xpos, transform.position.y, zpos);
     }
 
     private void unfreezeX()

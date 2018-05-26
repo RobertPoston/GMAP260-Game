@@ -21,6 +21,8 @@ public class character_controller : MonoBehaviour {
 
     public bool jump = false;
 
+    private bool start = true;
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -42,6 +44,10 @@ public class character_controller : MonoBehaviour {
             if (collision.gameObject.name == "StickyPlatform" && transform.parent != collision.gameObject.transform)
             {
                 transform.SetParent(collision.gameObject.transform);
+            }
+            if ((transform.position.z > room_size_z || transform.position.z < -room_size_z || transform.position.x > room_size_x || transform.position.x < -room_size_x) && !start)
+            {
+                transform.Rotate(0.0f, 180.0f, 0.0f);
             }
             StartCoroutine(jump_wait());
         }
@@ -85,6 +91,10 @@ public class character_controller : MonoBehaviour {
 
         if (jump == true && platformAllowJump && transform.position.y > -0.005f && transform.position.y < 2.0f)
         {
+            if (start)
+            {
+                start = false;
+            }
             rb.constraints = RigidbodyConstraints.None;
             if (current_direction == 3)
             {
