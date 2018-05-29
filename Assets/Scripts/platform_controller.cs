@@ -84,6 +84,39 @@ public class platform_controller : MonoBehaviour {
         }
     }
 
+    private void ResetPosition()
+    {
+        float xpos, zpos;
+        bool isEqual = false;
+        for (xpos = 0.0f; !isEqual; xpos += 10.0f)
+        {
+            if ((xpos - Mathf.Abs(transform.position.x)) <= 0.2f && (xpos - Mathf.Abs(transform.position.x)) >= -(0.2f))
+            {
+                isEqual = true;
+            }
+        }
+        xpos -= 10.0f;
+        if (Mathf.Sign(transform.position.x) == -1)
+        {
+            xpos = xpos * -(1.0f);
+        }
+        isEqual = false;
+        for (zpos = 0.0f; !isEqual; zpos += 10.0f)
+        {
+            if ((zpos - Mathf.Abs(transform.position.z)) <= 0.2f && (zpos - Mathf.Abs(transform.position.z)) >= -(0.2f))
+            {
+                isEqual = true;
+            }
+        }
+        zpos -= 10.0f;
+        isEqual = false;
+        if (Mathf.Sign(transform.position.z) == -1)
+        {
+            zpos = zpos * -(1.0f);
+        }
+        rb.position = new Vector3(xpos, transform.position.y, zpos);
+    }
+
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.name == "Cube" && isMoving)
@@ -167,12 +200,33 @@ public class platform_controller : MonoBehaviour {
             }
         }
         float xpos, zpos;
-        for (xpos = 0.0f; !Mathf.Approximately(xpos, Mathf.Abs(transform.position.x)); xpos += 10.0f)
-        { }
-        xpos = (transform.position.x / Mathf.Abs(transform.position.x)) * xpos;
-        for (zpos = 0.0f; !Mathf.Approximately(zpos, Mathf.Abs(transform.position.z)); zpos += 10.0f)
-        { }
-        zpos = (transform.position.z / Mathf.Abs(transform.position.z)) * zpos;
+        bool isEqual = false;
+        for (xpos = 0.0f; !isEqual; xpos += 10.0f)
+        {
+            if ((xpos - Mathf.Abs(transform.position.x)) <= 0.2f && (xpos - Mathf.Abs(transform.position.x)) >= -(0.2f))
+            {
+                isEqual = true;
+            }
+        }
+        xpos -= 10.0f;
+        if (Mathf.Sign(transform.position.x) == -1)
+        {
+            xpos = xpos * -(1.0f);
+        }
+        isEqual = false;
+        for (zpos = 0.0f; !isEqual; zpos += 10.0f)
+        {
+            if ((zpos - Mathf.Abs(transform.position.z)) <= 0.2f && (zpos - Mathf.Abs(transform.position.z)) >= -(0.2f))
+            {
+                isEqual = true;
+            }
+        }
+        zpos -= 10.0f;
+        isEqual = false;
+        if (Mathf.Sign(transform.position.z) == -1)
+        {
+            zpos = zpos * -(1.0f);
+        }
         rb.position = new Vector3(xpos, transform.position.y, zpos);
     }
 

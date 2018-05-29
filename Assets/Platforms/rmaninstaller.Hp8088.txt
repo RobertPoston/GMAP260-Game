@@ -1,0 +1,5 @@
+rmaninstaller Warning: libpng warning: iCCP: known incorrect sRGB profile
+rmaninstaller Warning: libpng warning: iCCP: known incorrect sRGB profile
+rmaninstaller Warning: libpng warning: iCCP: known incorrect sRGB profile
+rmaninstaller Warning: libpng warning: iCCP: known incorrect sRGB profile
+rmaninstaller Debug: License
