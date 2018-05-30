@@ -15,7 +15,7 @@ public class platform_controller : MonoBehaviour {
 
     private bool enableZcontrol = false;
     private bool enableXcontrol = false;
-    private bool isMoving = false;
+    bool isMoving = false;
     private bool rotate = true;
 
     private Vector3 oldPosition;
@@ -59,17 +59,14 @@ public class platform_controller : MonoBehaviour {
 
     private void OnCollisionStay(Collision collision)
     {
-        if (collision.gameObject.name == "Cube" && isMoving && type != platformType.Omni)
+        if (collision.gameObject.name == "Cube" && isMoving)
         {
             rb.constraints = RigidbodyConstraints.FreezeAll;
             isMoving = false;
         }
         else
         {
-            isMoving = false;
-        }
-        if ((collision.gameObject.name == "XdirPlatform" || collision.gameObject.name == "ZdirPlatform" || collision.gameObject.name == "OmniPlatform" || collision.gameObject.name == "StickyPlatform") && isMoving)
-        {
+            rb.constraints = RigidbodyConstraints.FreezeAll;
             isMoving = false;
         }
     }
@@ -82,39 +79,6 @@ public class platform_controller : MonoBehaviour {
             character_rb.AddForce(0.0f, -0.0001f, 0.0f);
             rotate = true;
         }
-    }
-
-    private void ResetPosition()
-    {
-        float xpos, zpos;
-        bool isEqual = false;
-        for (xpos = 0.0f; !isEqual; xpos += 10.0f)
-        {
-            if ((xpos - Mathf.Abs(transform.position.x)) <= 0.2f && (xpos - Mathf.Abs(transform.position.x)) >= -(0.2f))
-            {
-                isEqual = true;
-            }
-        }
-        xpos -= 10.0f;
-        if (Mathf.Sign(transform.position.x) == -1)
-        {
-            xpos = xpos * -(1.0f);
-        }
-        isEqual = false;
-        for (zpos = 0.0f; !isEqual; zpos += 10.0f)
-        {
-            if ((zpos - Mathf.Abs(transform.position.z)) <= 0.2f && (zpos - Mathf.Abs(transform.position.z)) >= -(0.2f))
-            {
-                isEqual = true;
-            }
-        }
-        zpos -= 10.0f;
-        isEqual = false;
-        if (Mathf.Sign(transform.position.z) == -1)
-        {
-            zpos = zpos * -(1.0f);
-        }
-        rb.position = new Vector3(xpos, transform.position.y, zpos);
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -135,6 +99,7 @@ public class platform_controller : MonoBehaviour {
         if ((collision.gameObject.name == "XdirPlatform" || collision.gameObject.name == "ZdirPlatform" || collision.gameObject.name == "OmniPlatform" || collision.gameObject.name == "StickyPlatform") && isMoving)
         {
             isMoving = false;
+            rb.constraints = RigidbodyConstraints.FreezeAll;
         }
         if (collision.gameObject.name == "Character")
         {
@@ -199,31 +164,35 @@ public class platform_controller : MonoBehaviour {
                 character_rb.constraints = RigidbodyConstraints.FreezeAll;
             }
         }
-        float xpos, zpos;
+        rb.velocity = new Vector3(0.0f, 0.0f, 0.0f);
+        rb.constraints = RigidbodyConstraints.FreezeAll;
+        float xpos, zpos, oldx, oldz;
         bool isEqual = false;
+        oldx = transform.position.x;
+        oldz = transform.position.z;
         for (xpos = 0.0f; !isEqual; xpos += 10.0f)
         {
-            if ((xpos - Mathf.Abs(transform.position.x)) <= 0.2f && (xpos - Mathf.Abs(transform.position.x)) >= -(0.2f))
+            if ((xpos - Mathf.Abs(oldx)) <= 5.0f && (xpos - Mathf.Abs(oldx)) >= -(5.0f))
             {
                 isEqual = true;
             }
         }
         xpos -= 10.0f;
-        if (Mathf.Sign(transform.position.x) == -1)
-        {
-            xpos = xpos * -(1.0f);
-        }
         isEqual = false;
         for (zpos = 0.0f; !isEqual; zpos += 10.0f)
         {
-            if ((zpos - Mathf.Abs(transform.position.z)) <= 0.2f && (zpos - Mathf.Abs(transform.position.z)) >= -(0.2f))
+            if ((zpos - Mathf.Abs(oldz)) <= 5.0f && (zpos - Mathf.Abs(oldz)) >= -(5.0f))
             {
                 isEqual = true;
             }
         }
         zpos -= 10.0f;
         isEqual = false;
-        if (Mathf.Sign(transform.position.z) == -1)
+        if (Mathf.Sign(oldx) == -1)
+        {
+            xpos = xpos * -(1.0f);
+        }
+        if (Mathf.Sign(oldz) == -1)
         {
             zpos = zpos * -(1.0f);
         }

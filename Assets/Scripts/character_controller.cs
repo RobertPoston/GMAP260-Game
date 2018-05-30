@@ -6,8 +6,10 @@ public class character_controller : MonoBehaviour {
 
     public Rigidbody rb;
     public GameObject character;
+    public GameObject jiangshi;
     public GameObject winScreen;
     public GameObject lossScreen;
+    public Animator anim;
     public float jump_timer = 2.0f;
     public int current_direction = 0;
     public int room_size_x = 50;
@@ -39,6 +41,7 @@ public class character_controller : MonoBehaviour {
 
     private void OnCollisionEnter(Collision collision)
     {
+        anim.SetBool("isJumping", false);
         if (collision.gameObject.name == "Cube" || collision.gameObject.name == "ZdirPlatform" || collision.gameObject.name == "XdirPlatform" || collision.gameObject.name == "StickyPlatform" || collision.gameObject.name == "OmniPlatform")
         {
             if (collision.gameObject.name == "StickyPlatform" && transform.parent != collision.gameObject.transform)
@@ -57,11 +60,26 @@ public class character_controller : MonoBehaviour {
         }
     }
 
+    Vector3 deathPosition = new Vector3(-100.0f, -100.0f, -100.0f);
+
     private void Update()
     {
         if (transform.position.y < -1.0f)
         {
             lossScreen.SetActive(true);
+            anim.SetBool("isFalling", true);
+            if (deathPosition == new Vector3(-100.0f, -100.0f, -100.0f))
+            {
+                deathPosition = transform.position;
+            }
+            jiangshi.transform.position = new Vector3(deathPosition.x, transform.position.y, deathPosition.z);
+            jiangshi.transform.rotation = transform.rotation;
+        }
+        else
+        {
+            anim.SetBool("isFalling", false);
+            jiangshi.transform.position = new Vector3(transform.position.x, 0.0f, transform.position.z);
+            jiangshi.transform.rotation = transform.rotation;
         }
     }
 
@@ -100,21 +118,25 @@ public class character_controller : MonoBehaviour {
             {
                 rb.constraints = RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotation;
                 rb.AddForce(-jumpForceH, jumpForceY, 0.0f);
+                anim.SetBool("isJumping", true);
             }
             else if (current_direction == 2)
             {
                 rb.constraints = RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotation;
                 rb.AddForce(jumpForceH, jumpForceY, 0.0f);
+                anim.SetBool("isJumping", true);
             }
             else if (current_direction == 1)
             {
                 rb.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezeRotation;
                 rb.AddForce(0.0f, jumpForceY, -jumpForceH);
+                anim.SetBool("isJumping", true);
             }
             else
             {
                 rb.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezeRotation;
                 rb.AddForce(0.0f, jumpForceY, jumpForceH);
+                anim.SetBool("isJumping", true);
             }
             jump = false;
         }

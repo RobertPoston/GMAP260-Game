@@ -131,4 +131,3 @@ MonoBehaviour:
   rb: {fileID: 54109079205066356}
   character_rb: {fileID: 0}
   characterPlayer: {fileID: 0}
-  isMoving: 0
