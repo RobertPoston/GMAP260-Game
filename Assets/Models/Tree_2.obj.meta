@@ -1,16 +1,16 @@
 fileFormatVersion: 2
-guid: 94668e0a4ab67a243bc88076f8338dd2
+guid: 953e58da96824bc47944182a6fcbf5e3
 ModelImporter:
   serializedVersion: 22
   fileIDToRecycleName:
     100000: //RootNode
-    100002: joint1
-    100004: joint2
+    100002: trees_lanterns:pCube1
     400000: //RootNode
-    400002: joint1
-    400004: joint2
-    7400000: Take 001
-    9500000: //RootNode
+    400002: trees_lanterns:pCube1
+    2100000: trees_lanterns_pCube1Mat
+    2300000: trees_lanterns:pCube1
+    3300000: trees_lanterns:pCube1
+    4300000: trees_lanterns:pCube1
   externalObjects: {}
   materials:
     importMaterials: 1
@@ -68,7 +68,7 @@ ModelImporter:
     tangentImportMode: 3
     normalCalculationMode: 4
   importAnimation: 1
-  copyAvatar: 1
+  copyAvatar: 0
   humanDescription:
     serializedVersion: 2
     human: []
@@ -86,7 +86,7 @@ ModelImporter:
     hasExtraRoot: 0
     skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
-  animationType: 2
+  animationType: 0
   humanoidOversampling: 1
   additionalBone: 0
   userData: 

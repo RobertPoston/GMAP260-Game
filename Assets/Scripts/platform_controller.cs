@@ -13,11 +13,8 @@ public class platform_controller : MonoBehaviour {
     public Rigidbody character_rb;
     public character_controller characterPlayer;
 
-    private bool enableZcontrol = false;
-    private bool enableXcontrol = false;
     bool isMoving = false;
     private bool rotate = true;
-
     private Vector3 oldPosition;
 
 	// Use this for initialization
@@ -26,45 +23,11 @@ public class platform_controller : MonoBehaviour {
         rb.constraints = RigidbodyConstraints.FreezeAll;
 
         oldPosition = transform.position;
-
-        switch (type)
-        {
-            case platformType.Omni:
-                enableXcontrol = true;
-                enableZcontrol = true;
-                break;
-            case platformType.Zdir:
-                enableZcontrol = true;
-                break;
-            case platformType.Xdir:
-                enableXcontrol = true;
-                break;
-            case platformType.Glue:
-                if (subType == platformType.Omni)
-                {
-                    enableXcontrol = true;
-                    enableZcontrol = true;
-                }
-                else if (subType == platformType.Xdir)
-                {
-                    enableXcontrol = true;
-                }
-                else if (subType == platformType.Zdir)
-                {
-                    enableZcontrol = true;
-                }
-                break;
-        }
 	}
 
     private void OnCollisionStay(Collision collision)
     {
         if (collision.gameObject.name == "Cube" && isMoving)
-        {
-            rb.constraints = RigidbodyConstraints.FreezeAll;
-            isMoving = false;
-        }
-        else
         {
             rb.constraints = RigidbodyConstraints.FreezeAll;
             isMoving = false;
@@ -211,7 +174,7 @@ public class platform_controller : MonoBehaviour {
 
     private void FixedUpdate()
     {
-        if (enableXcontrol && !isMoving)
+        if ((type == platformType.Xdir || subType == platformType.Xdir) && !isMoving)
         {
             if (Input.GetKey(KeyCode.D))
             {
@@ -228,7 +191,7 @@ public class platform_controller : MonoBehaviour {
                 rb.AddForce(-(force), 0.0f, 0.0f);
             }
         }
-        if (enableZcontrol && !isMoving)
+        if ((type == platformType.Zdir || subType == platformType.Zdir) && !isMoving)
         {
             if (Input.GetKey(KeyCode.W))
             {

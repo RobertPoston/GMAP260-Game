@@ -37,7 +37,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4938557030316440}
   m_Layer: 0
-  m_Name: PlatformType01
+  m_Name: ZdirPlatformChild
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
