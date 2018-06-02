@@ -174,7 +174,7 @@ public class platform_controller : MonoBehaviour {
 
     private void FixedUpdate()
     {
-        if ((type == platformType.Xdir || subType == platformType.Xdir) && !isMoving)
+        if ((type == platformType.Xdir || type == platformType.Omni || subType == platformType.Xdir || subType == platformType.Omni) && !isMoving)
         {
             if (Input.GetKey(KeyCode.D))
             {
@@ -191,7 +191,7 @@ public class platform_controller : MonoBehaviour {
                 rb.AddForce(-(force), 0.0f, 0.0f);
             }
         }
-        if ((type == platformType.Zdir || subType == platformType.Zdir) && !isMoving)
+        if ((type == platformType.Zdir || type == platformType.Omni || subType == platformType.Zdir || subType == platformType.Omni) && !isMoving)
         {
             if (Input.GetKey(KeyCode.W))
             {
