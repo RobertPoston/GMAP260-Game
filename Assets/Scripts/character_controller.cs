@@ -10,14 +10,15 @@ public class character_controller : MonoBehaviour {
     public GameObject winScreen;
     public GameObject lossScreen;
     public Animator anim;
+    public globals glbls;
     public float jump_timer = 2.0f;
     public int current_direction = 0;
     public int room_size_x = 50;
     public int room_size_z = 50;
     //Directions as follows 0: Positive Z; 1: Negative Z; 2: Positive X; 3: Negative X
-    public float jumpForceY = 3000.0f;
-    public float jumpForceH = 1739.139f;
-    public float downForce = 50.0f;
+    public float jumpForceY = 2500.0f;
+    public float jumpForceH = 2614.366f;
+    public float downForce = 400.0f;
     public bool platformAllowJump = true;
     public bool deParent = false;
 
@@ -28,6 +29,7 @@ public class character_controller : MonoBehaviour {
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        glbls = (globals)GameObject.FindObjectOfType(typeof(globals));
     }
 
     IEnumerator jump_wait()
@@ -56,6 +58,9 @@ public class character_controller : MonoBehaviour {
         }
         else if (collision.gameObject.name == "Coffin")
         {
+            glbls.platIsMoving = true;
+            glbls.isComplete = true;
+            glbls.spriteState = 6;
             winScreen.SetActive(true);
         }
     }
@@ -68,6 +73,8 @@ public class character_controller : MonoBehaviour {
         {
             lossScreen.SetActive(true);
             anim.SetBool("isFalling", true);
+            glbls.platIsMoving = true;
+            glbls.spriteState = 5;
             if (deathPosition == new Vector3(-100.0f, -100.0f, -100.0f))
             {
                 deathPosition = transform.position;
