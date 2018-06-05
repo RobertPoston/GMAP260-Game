@@ -7,13 +7,14 @@ public class platform_controller : MonoBehaviour {
     public enum platformType { None, Zdir, Xdir, Glue, Omni, SwitchLeft, SwitchRight };
     public platformType type = platformType.Zdir;
     public platformType subType = platformType.None;
-    public float force = 15000.0f;
-    public float maxSpeed = 60.0f;
+    //public float force = 15000.0f;
+    public float maxSpeed = 100.0f;
     public Rigidbody rb;
     public Rigidbody character_rb;
     public character_controller characterPlayer;
+    public globals glbls;
 
-    bool isMoving = false;
+    //bool isMoving = false;
     private bool rotate = true;
     private Vector3 oldPosition;
 
@@ -23,14 +24,16 @@ public class platform_controller : MonoBehaviour {
         rb.constraints = RigidbodyConstraints.FreezeAll;
 
         oldPosition = transform.position;
+
+        glbls = (globals)GameObject.FindObjectOfType(typeof(globals));
 	}
 
     private void OnCollisionStay(Collision collision)
     {
-        if (collision.gameObject.name == "Cube" && isMoving)
+        if (collision.gameObject.name == "Cube" && glbls.platIsMoving)
         {
             rb.constraints = RigidbodyConstraints.FreezeAll;
-            isMoving = false;
+            glbls.platIsMoving = false;
         }
     }
 
@@ -46,10 +49,10 @@ public class platform_controller : MonoBehaviour {
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.name == "Cube" && isMoving)
+        if (collision.gameObject.name == "Cube" && glbls.platIsMoving)
         {
             rb.constraints = RigidbodyConstraints.FreezeAll;
-            isMoving = false;
+            glbls.platIsMoving = false;
             if (transform.childCount > 0)
             {
                 if (oldPosition != transform.position)
@@ -59,9 +62,9 @@ public class platform_controller : MonoBehaviour {
                 }
             }
         }
-        if ((collision.gameObject.name == "XdirPlatform" || collision.gameObject.name == "ZdirPlatform" || collision.gameObject.name == "OmniPlatform" || collision.gameObject.name == "StickyPlatform") && isMoving)
+        if ((collision.gameObject.name == "XdirPlatform" || collision.gameObject.name == "ZdirPlatform" || collision.gameObject.name == "OmniPlatform" || collision.gameObject.name == "StickyPlatform") && glbls.platIsMoving)
         {
-            isMoving = false;
+            glbls.platIsMoving = false;
             rb.constraints = RigidbodyConstraints.FreezeAll;
         }
         if (collision.gameObject.name == "Character")
@@ -174,38 +177,42 @@ public class platform_controller : MonoBehaviour {
 
     private void FixedUpdate()
     {
-        if ((type == platformType.Xdir || type == platformType.Omni || subType == platformType.Xdir || subType == platformType.Omni) && !isMoving)
+        if ((type == platformType.Xdir || type == platformType.Omni || subType == platformType.Xdir || subType == platformType.Omni))
         {
-            if (Input.GetKey(KeyCode.D))
+            if (glbls.moveDirection == 1)
             {
                 oldPosition = transform.position;
                 unfreezeX();
-                isMoving = true;
-                rb.AddForce(force, 0.0f, 0.0f);
+                glbls.platIsMoving = true;
+                rb.velocity = new Vector3(maxSpeed, 0.0f, 0.0f);
+                glbls.spriteState = 1;
             }
-            if (Input.GetKey(KeyCode.A))
+            if (glbls.moveDirection == 2)
             {
                 oldPosition = transform.position;
                 unfreezeX();
-                isMoving = true;
-                rb.AddForce(-(force), 0.0f, 0.0f);
+                glbls.platIsMoving = true;
+                rb.velocity = new Vector3(-(maxSpeed), 0.0f, 0.0f);
+                glbls.spriteState = 2;
             }
         }
-        if ((type == platformType.Zdir || type == platformType.Omni || subType == platformType.Zdir || subType == platformType.Omni) && !isMoving)
+        if ((type == platformType.Zdir || type == platformType.Omni || subType == platformType.Zdir || subType == platformType.Omni))
         {
-            if (Input.GetKey(KeyCode.W))
+            if (glbls.moveDirection == 3)
             {
                 oldPosition = transform.position;
                 unfreezeZ();
-                isMoving = true;
-                rb.AddForce(0.0f, 0.0f, force);
+                glbls.platIsMoving = true;
+                rb.velocity = new Vector3(0.0f, 0.0f, maxSpeed);
+                glbls.spriteState = 3;
             }
-            if (Input.GetKey(KeyCode.S))
+            if (glbls.moveDirection == 4)
             {
                 oldPosition = transform.position;
                 unfreezeZ();
-                isMoving = true;
-                rb.AddForce(0.0f, 0.0f, -(force));
+                glbls.platIsMoving = true;
+                rb.velocity = new Vector3(0.0f, 0.0f, -(maxSpeed));
+                glbls.spriteState = 4;
             }
         }
         if (Mathf.Abs(rb.velocity.magnitude) > maxSpeed)
