@@ -2685,6 +2685,11 @@ Prefab:
       propertyPath: coffin_anim
       value: 
       objectReference: {fileID: 1504689038}
+    - target: {fileID: 114403628551142312, guid: 76e43888cd485784894bb405e88daf74,
+        type: 2}
+      propertyPath: jump_timer
+      value: 0.5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 76e43888cd485784894bb405e88daf74, type: 2}
   m_IsPrefabParent: 0

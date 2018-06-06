@@ -14,7 +14,7 @@ public class character_controller : MonoBehaviour {
     public Animator coffin_anim;
     public globals glbls;
     public AudioSource ch_sounds;
-    public AudioClip[] landingSounds = new AudioClip[11];
+    public AudioClip[] landingSounds = new AudioClip[12];
     public float jump_timer = 2.0f;
     public int current_direction = 0;
     public int room_size_x = 50;
@@ -91,6 +91,8 @@ public class character_controller : MonoBehaviour {
         if (transform.position.y < -1.0f)
         {
             lossScreen.SetActive(true);
+            ch_sounds.clip = landingSounds[11];
+            ch_sounds.Play();
             anim.SetBool("isFalling", true);
             glbls.platIsMoving = true;
             glbls.spriteState = 5;

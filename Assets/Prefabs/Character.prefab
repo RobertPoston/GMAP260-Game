@@ -198,6 +198,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: e2520a98577905a4e86e77f113a3dd24, type: 3}
   - {fileID: 8300000, guid: 230dc24d4bd99064dab4d69a13e717c5, type: 3}
   - {fileID: 8300000, guid: 19afc637ac5c7084996dcba35ea95295, type: 3}
+  - {fileID: 8300000, guid: ce41477b64177874db4094eb976643d3, type: 3}
   jump_timer: 1
   current_direction: 2
   room_size_x: 50
