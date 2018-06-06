@@ -10,15 +10,7 @@ public class token_spin : MonoBehaviour {
 	void Start () {
         rb = GetComponent<Rigidbody>();
         rb.constraints = RigidbodyConstraints.FreezePosition;
-        rb.AddTorque(35.0f, 24.0f, 42.0f);
-    }
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.name == "Character")
-        {
-            Destroy(gameObject);
-        }
+        rb.AddTorque(0.0f, -5.0f, 0.0f);
     }
 
     // Update is called once per frame

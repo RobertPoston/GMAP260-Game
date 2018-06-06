@@ -86,13 +86,14 @@ MonoBehaviour:
   winScreen: {fileID: 0}
   lossScreen: {fileID: 0}
   anim: {fileID: 0}
+  glbls: {fileID: 0}
   jump_timer: 1
   current_direction: 2
   room_size_x: 50
   room_size_z: 50
-  jumpForceY: 3000
-  jumpForceH: 1739.139
-  downForce: 50
+  jumpForceY: 2500
+  jumpForceH: 2614.366
+  downForce: 400
   platformAllowJump: 1
   deParent: 0
   jump: 0

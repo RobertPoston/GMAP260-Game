@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 
 public class character_controller : MonoBehaviour {
 
@@ -10,7 +11,9 @@ public class character_controller : MonoBehaviour {
     public GameObject winScreen;
     public GameObject lossScreen;
     public Animator anim;
+    public Animator coffin_anim;
     public globals glbls;
+    public AudioClip[] landingSounds = new AudioClip[11];
     public float jump_timer = 2.0f;
     public int current_direction = 0;
     public int room_size_x = 50;
@@ -30,6 +33,7 @@ public class character_controller : MonoBehaviour {
     {
         rb = GetComponent<Rigidbody>();
         glbls = (globals)GameObject.FindObjectOfType(typeof(globals));
+        Random.InitState(100);
     }
 
     IEnumerator jump_wait()
@@ -39,6 +43,11 @@ public class character_controller : MonoBehaviour {
 
         //Begin jumping
         jump = true;
+    }
+
+    private int landingSelection()
+    {
+        return 1;
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -62,6 +71,8 @@ public class character_controller : MonoBehaviour {
             glbls.isComplete = true;
             glbls.spriteState = 6;
             winScreen.SetActive(true);
+            coffin_anim.SetBool("levelcomplete", true);
+            anim.SetBool("levelcomplete", true);
         }
     }
 
@@ -82,7 +93,7 @@ public class character_controller : MonoBehaviour {
             jiangshi.transform.position = new Vector3(deathPosition.x, transform.position.y, deathPosition.z);
             jiangshi.transform.rotation = transform.rotation;
         }
-        else
+        else if (!glbls.isComplete)
         {
             anim.SetBool("isFalling", false);
             jiangshi.transform.position = new Vector3(transform.position.x, 0.0f, transform.position.z);

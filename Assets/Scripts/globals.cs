@@ -26,13 +26,16 @@ public class globals : MonoBehaviour {
 
     IEnumerator SpriteUpdate()
     {
+        yield return new WaitForSeconds(spriteCooldown);
         spriteState = 0;
-
-        yield return new WaitForSecondsRealtime(spriteCooldown);
     }
 
     private void Update()
     {
+        if (isComplete)
+        {
+            spriteState = 6;
+        }
         if (spriteState == 1)
         {
             uiguy.sprite = sprites[1];
@@ -56,23 +59,22 @@ public class globals : MonoBehaviour {
         else if (spriteState == 5)
         {
             uiguy.sprite = sprites[5];
-            needsupdate = true;
+            needsupdate = false;
         }
         else if (spriteState == 6)
         {
             uiguy.sprite = sprites[6];
-            needsupdate = true;
+            needsupdate = false;
         }
         else
         {
             uiguy.sprite = sprites[0];
-            needsupdate = true;
         }
 
         if (needsupdate)
         {
-            SpriteUpdate();
             needsupdate = false;
+            StartCoroutine(SpriteUpdate());
         }
 
         if (!platIsMoving)
@@ -82,22 +84,22 @@ public class globals : MonoBehaviour {
                 platIsMoving = true;
             }
             moveDirection = 0;
-            if (Input.GetKey(KeyCode.D))
+            if (Input.GetKeyDown(KeyCode.D))
             {
                 moveDirection = 1;
                 platIsMoving = true;
             }
-            if (Input.GetKey(KeyCode.A))
+            if (Input.GetKeyDown(KeyCode.A))
             {
                 moveDirection = 2;
                 platIsMoving = true;
             }
-            if (Input.GetKey(KeyCode.W))
+            if (Input.GetKeyDown(KeyCode.W))
             {
                 moveDirection = 3;
                 platIsMoving = true;
             }
-            if (Input.GetKey(KeyCode.S))
+            if (Input.GetKeyDown(KeyCode.S))
             {
                 moveDirection = 4;
                 platIsMoving = true;
