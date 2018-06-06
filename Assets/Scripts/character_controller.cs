@@ -13,6 +13,7 @@ public class character_controller : MonoBehaviour {
     public Animator anim;
     public Animator coffin_anim;
     public globals glbls;
+    public AudioSource ch_sounds;
     public AudioClip[] landingSounds = new AudioClip[11];
     public float jump_timer = 2.0f;
     public int current_direction = 0;
@@ -32,6 +33,7 @@ public class character_controller : MonoBehaviour {
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        ch_sounds = GetComponent<AudioSource>();
         glbls = (globals)GameObject.FindObjectOfType(typeof(globals));
         Random.InitState(100);
     }
@@ -45,9 +47,10 @@ public class character_controller : MonoBehaviour {
         jump = true;
     }
 
-    private int landingSelection()
+    private AudioClip landingSelection()
     {
-        return 1;
+        int i = (int)Random.Range(0.0f, 10.0f);
+        return landingSounds[i];
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -63,12 +66,17 @@ public class character_controller : MonoBehaviour {
             {
                 transform.Rotate(0.0f, 180.0f, 0.0f);
             }
+            ch_sounds.clip = landingSelection();
+            ch_sounds.Play();
             StartCoroutine(jump_wait());
         }
         else if (collision.gameObject.name == "Coffin")
         {
+            ch_sounds.clip = landingSelection();
+            ch_sounds.Play();
             glbls.platIsMoving = true;
             glbls.isComplete = true;
+            glbls.playWinSound = true;
             glbls.spriteState = 6;
             winScreen.SetActive(true);
             coffin_anim.SetBool("levelcomplete", true);

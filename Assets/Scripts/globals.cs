@@ -2,19 +2,29 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Audio;
 
 public class globals : MonoBehaviour {
 
     public Image uiguy;
     public Sprite[] sprites = new Sprite[8];
+    public GameObject MusicController;
+    public AudioSource winSound;
     public float spriteCooldown = 1.0f;
     public bool isComplete = false;
     public bool platIsMoving = false;
     public int spriteState = 0;
     public int[] completeLvls = new int[12];
     public int moveDirection = 0;
+    public bool playWinSound = false;
 
     private bool needsupdate = true;
+
+    private void Start()
+    {
+        MusicController = GameObject.Find("MusicController");
+        winSound = GetComponent<AudioSource>();
+    }
 
     public void CompleteLevel(int level)
     {
@@ -35,6 +45,12 @@ public class globals : MonoBehaviour {
         if (isComplete)
         {
             spriteState = 6;
+            MusicController.SetActive(false);
+            if (playWinSound)
+            {
+                winSound.Play();
+                playWinSound = false;
+            }
         }
         if (spriteState == 1)
         {
